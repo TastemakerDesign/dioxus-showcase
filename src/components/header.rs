@@ -32,17 +32,17 @@ pub fn Header() -> Element {
         spawn(async move {
             use gloo::events::EventListener;
             use wasm_bindgen::JsCast;
-            
+
             let window = web_sys::window().unwrap();
             let document = window.document().unwrap();
-            
+
             let listener = EventListener::new(&document, "keydown", move |event| {
                 let keyboard_event = event.dyn_ref::<web_sys::KeyboardEvent>().unwrap();
-                
-                if keyboard_event.key() == "/" 
-                    && !keyboard_event.ctrl_key() 
-                    && !keyboard_event.alt_key() 
-                    && !keyboard_event.meta_key() 
+
+                if keyboard_event.key() == "/"
+                    && !keyboard_event.ctrl_key()
+                    && !keyboard_event.alt_key()
+                    && !keyboard_event.meta_key()
                 {
                     // Check if we're currently focused on an input field (but not our search box)
                     let should_focus_search = if let Some(target) = keyboard_event.target() {
@@ -65,7 +65,7 @@ pub fn Header() -> Element {
                     }
                 }
             });
-            
+
             // Keep the listener alive
             std::mem::forget(listener);
         });
