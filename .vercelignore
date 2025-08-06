@@ -1,0 +1,6 @@
+_ignored
+target/debug
+target/wasm32-unknown-unknown
+target/web-dev
+target/web-release
+target/dx/dioxus-showcase/debug
