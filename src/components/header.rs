@@ -6,6 +6,8 @@ pub fn Header() -> Element {
 
     let mut star_count = use_signal(|| "30.0k".to_string());
     let mut is_mobile_menu_open = use_signal(|| false);
+    let mut search_input_ref = use_signal(|| None::<Event<MountedData>>);
+    let mut just_focused_by_slash = use_signal(|| false);
 
     use_effect(move || {
         spawn(async move {
@@ -23,6 +25,49 @@ pub fn Header() -> Element {
                     }
                 }
             }
+        });
+    });
+
+    use_effect(move || {
+        spawn(async move {
+            use gloo::events::EventListener;
+            use wasm_bindgen::JsCast;
+            
+            let window = web_sys::window().unwrap();
+            let document = window.document().unwrap();
+            
+            let listener = EventListener::new(&document, "keydown", move |event| {
+                let keyboard_event = event.dyn_ref::<web_sys::KeyboardEvent>().unwrap();
+                
+                if keyboard_event.key() == "/" 
+                    && !keyboard_event.ctrl_key() 
+                    && !keyboard_event.alt_key() 
+                    && !keyboard_event.meta_key() 
+                {
+                    // Check if we're currently focused on an input field (but not our search box)
+                    let should_focus_search = if let Some(target) = keyboard_event.target() {
+                        if let Some(element) = target.dyn_ref::<web_sys::HtmlElement>() {
+                            let tag_name = element.tag_name().to_lowercase();
+                            tag_name != "input" && tag_name != "textarea"
+                        } else {
+                            true
+                        }
+                    } else {
+                        true
+                    };
+
+                    if should_focus_search {
+                        keyboard_event.prevent_default();
+                        just_focused_by_slash.set(true);
+                        if let Some(search_ref) = search_input_ref.read().as_ref() {
+                            let _ = search_ref.set_focus(true);
+                        }
+                    }
+                }
+            });
+            
+            // Keep the listener alive
+            std::mem::forget(listener);
         });
     });
 
@@ -103,6 +148,18 @@ pub fn Header() -> Element {
                                 r#type: "text",
                                 placeholder: "Search...",
                                 class: "bg-zinc-800 border border-zinc-700 rounded-lg pl-10 pr-4 py-2 text-white placeholder-zinc-300 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500",
+                                onmounted: move |mounted| {
+                                    search_input_ref.set(Some(mounted));
+                                },
+                                onkeypress: move |evt| {
+                                    if just_focused_by_slash() && evt.code() == Code::Slash {
+                                        evt.prevent_default();
+                                        just_focused_by_slash.set(false);
+                                    }
+                                },
+                                oninput: move |_| {
+                                    just_focused_by_slash.set(false);
+                                },
                             }
                             span { class: "absolute right-2 bg-zinc-900 w-6 h-6 p-3 pb-3.5 mt-[-1] rounded-md flex justify-center items-center border border-zinc-700 top-2 text-zinc-300 text-sm",
                                 "/"
