@@ -14,7 +14,7 @@ pub fn Hero() -> Element {
         div { class: "bg-zinc-950",
             main { class: "max-w-7xl mx-auto px-8 py-12",
                 div { class: "mb-6",
-                    h1 { class: "text-4xl font-bold text-white", "User Showcase" }
+                    h1 { class: "text-4xl font-bold text-white", "(Unofficial) User Showcase" }
                 }
                 div { class: "mb-12",
                     p { class: "text-xl text-white",
