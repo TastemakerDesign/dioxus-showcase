@@ -3,12 +3,12 @@ use dioxus::prelude::*;
 
 #[component]
 pub fn Hero() -> Element {
-    const BIONIC_GPT_LOGO: Asset = asset!("/assets/logos/bionic-gpt-logo.avif");
-    const FREYA_LOGO: Asset = asset!("/assets/logos/freya-logo.avif");
-    const FLONEUM_LOGO: Asset = asset!("/assets/logos/floneum-logo.avif");
-    const HEMI_LOGO: Asset = asset!("/assets/logos/hemi-logo.avif");
-    const BIYARD_LOGO: Asset = asset!("/assets/logos/biyard-logo.avif");
-    const LINKECHO_LOGO: Asset = asset!("/assets/logos/linkecho-logo.avif");
+    const BIONIC_GPT_LOGO: Asset = asset!("/assets/logos/bionic-gpt-logo.webp");
+    const FREYA_LOGO: Asset = asset!("/assets/logos/freya-logo.webp");
+    const FLONEUM_LOGO: Asset = asset!("/assets/logos/floneum-logo.webp");
+    const HEMI_LOGO: Asset = asset!("/assets/logos/hemi-logo.webp");
+    const BIYARD_LOGO: Asset = asset!("/assets/logos/biyard-logo.webp");
+    const LINKECHO_LOGO: Asset = asset!("/assets/logos/linkecho-logo.webp");
 
     rsx! {
         div { class: "bg-zinc-950",

@@ -2,7 +2,7 @@ use dioxus::prelude::*;
 
 #[component]
 pub fn Header() -> Element {
-    const DIOXUS_LOGO: Asset = asset!("/assets/dioxus-logo.png");
+    const DIOXUS_LOGO: Asset = asset!("/assets/dioxus-logo.webp");
 
     let mut star_count = use_signal(|| "30.0k".to_string());
     let mut is_mobile_menu_open = use_signal(|| false);
